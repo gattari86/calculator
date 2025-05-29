@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poppy Marketing Services Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .font-raleway { font-family: 'Raleway', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); }
+        .gradient-hover:hover { background: linear-gradient(135deg, #5FDDD4 0%, #54B09D 100%); }
+        .custom-checkbox:checked + .custom-checkbox-label::before {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border-color: #4ECDC4;
+        }
+        .custom-checkbox-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            background: white;
+            transition: all 0.2s;
+        }
+        .custom-checkbox:checked + .custom-checkbox-label::after {
+            content: '✓';
+            position: absolute;
+            left: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .service-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .service-card.selected {
+            border-color: #4ECDC4;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.05) 0%, rgba(68, 160, 141, 0.05) 100%);
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-raleway">
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8 text-center">
+                <h1 class="font-poppins text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    Poppy Marketing Services Calculator
+                </h1>
+                <p class="font-raleway text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    Thank you for giving us a try. Use this tool to get an approximate idea of your project cost based on the services you need. Every business is different — this is just a starting point!
+                </p>
+            </div>
+
+            <!-- Services Selection -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="font-poppins text-2xl font-semibold text-gray-800 mb-6">
+                    Step 1: Select Services
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="servicesGrid">
+                    <!-- Services will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Business Size -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="font-poppins text-2xl font-semibold text-gray-800 mb-6">
+                    Step 2: Business Size
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-teal-300 transition-colors">
+                        <input type="radio" name="businessSize" value="1.0" class="mr-3" checked>
+                        <div>
+                            <div class="font-poppins font-semibold">Solo / Micro</div>
+                            <div class="text-sm text-gray-600">1–4 employees</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-teal-300 transition-colors">
+                        <input type="radio" name="businessSize" value="1.2" class="mr-3">
+                        <div>
+                            <div class="font-poppins font-semibold">Small Team</div>
+                            <div class="text-sm text-gray-600">5–20 employees</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-teal-300 transition-colors">
+                        <input type="radio" name="businessSize" value="1.5" class="mr-3">
+                        <div>
+                            <div class="font-poppins font-semibold">Medium Business</div>
+                            <div class="text-sm text-gray-600">21–100 employees</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-teal-300 transition-colors">
+                        <input type="radio" name="businessSize" value="2.0" class="mr-3">
+                        <div>
+                            <div class="font-poppins font-semibold">Large / Dept-Based</div>
+                            <div class="text-sm text-gray-600">101–250 employees</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Rush Option -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="font-poppins text-2xl font-semibold text-gray-800 mb-6">
+                    Step 3: Timeline
+                </h2>
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                    <div>
+                        <div class="font-poppins font-semibold">Rush Project</div>
+                        <div class="text-sm text-gray-600">Add 15% for expedited delivery</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="rushOption">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Calculate Button -->
+            <div class="text-center mb-8">
+                <button onclick="calculateEstimate()" class="gradient-bg gradient-hover text-white font-poppins font-semibold text-lg px-12 py-4 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
+                    Calculate Estimate
+                </button>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="text-center">
+                    <h3 class="font-poppins text-2xl font-semibold text-gray-800 mb-4">
+                        Estimated Project Cost:
+                    </h3>
+                    <div id="estimateAmount" class="text-4xl font-poppins font-bold gradient-bg bg-clip-text text-transparent mb-4">
+                        $0 (approx.)
+                    </div>
+                    <p class="font-raleway text-gray-600 mb-6">
+                        This is a rough estimate based on your selections. Every project is unique!<br>
+                        Let's connect for a tailored quote and next steps.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div id="callToAction" class="hidden bg-white rounded-xl shadow-lg p-8 text-center">
+                <h3 class="font-poppins text-xl font-semibold text-gray-800 mb-4">
+                    Want a quote tailored to your goals?
+                </h3>
+                <p class="font-raleway text-gray-600 mb-6">
+                    Let's chat and bring your vision to life. It's free to get started.
+                </p>
+                <a href="https://www.poppymarketingandconsulting.com/contact" 
+                   class="inline-block gradient-bg gradient-hover text-white font-poppins font-semibold text-lg px-8 py-3 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
+                    Book a Free Consultation
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const services = [
+            { name: "Brand Story Development", price: 800 },
+            { name: "Visual Identity Design", price: 1500 },
+            { name: "Brand Voice & Messaging", price: 1000 },
+            { name: "Market & Competitor Analysis", price: 1250 },
+            { name: "Growth Roadmap Planning", price: 5000 },
+            { name: "Budget Allocation Strategy", price: 3000 },
+            { name: "Website Design & Development", price: 3000 },
+            { name: "SEO & Content Strategy", price: 1500 },
+            { name: "Social Media Presence", price: 1500 },
+            { name: "Marketing Automation Setup", price: 3000 },
+            { name: "Process Optimization Sprint", price: 7600 },
+            { name: "Employee Communications & Engagement", price: 8000 },
+            { name: "Leadership Development Workshops", price: 6000 }
+        ];
+
+        function populateServices() {
+            const grid = document.getElementById('servicesGrid');
+            services.forEach((service, index) => {
+                const serviceCard = document.createElement('div');
+                serviceCard.className = 'service-card p-4 border-2 border-gray-200 rounded-lg cursor-pointer';
+                serviceCard.innerHTML = `
+                    <label class="cursor-pointer block">
+                        <input type="checkbox" value="${service.price}" data-name="${service.name}" class="hidden service-checkbox" onchange="toggleServiceCard(this)">
+                        <div class="font-poppins font-semibold mb-2">${service.name}</div>
+                        <div class="text-teal-600 font-semibold">$${service.price.toLocaleString()}</div>
+                    </label>
+                `;
+                grid.appendChild(serviceCard);
+            });
+        }
+
+        function toggleServiceCard(checkbox) {
+            const card = checkbox.closest('.service-card');
+            if (checkbox.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        }
+
+        function calculateEstimate() {
+            const selectedServices = document.querySelectorAll('.service-checkbox:checked');
+            const businessSizeMultiplier = parseFloat(document.querySelector('input[name="businessSize"]:checked').value);
+            const rushOption = document.getElementById('rushOption').checked;
+
+            let total = 0;
+            selectedServices.forEach(service => {
+                total += parseFloat(service.value);
+            });
+
+            // Apply business size multiplier
+            total *= businessSizeMultiplier;
+
+            // Apply rush option
+            if (rushOption) {
+                total *= 1.15;
+            }
+
+            // Display results
+            document.getElementById('estimateAmount').textContent = `$${Math.round(total).toLocaleString()} (approx.)`;
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('callToAction').classList.remove('hidden');
+
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize the page
+        populateServices();
+
+        // Add click handlers for radio buttons to update border colors
+        document.querySelectorAll('input[name="businessSize"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('input[name="businessSize"]').forEach(r => {
+                    r.closest('label').classList.remove('border-teal-400');
+                    r.closest('label').classList.add('border-gray-200');
+                });
+                this.closest('label').classList.remove('border-gray-200');
+                this.closest('label').classList.add('border-teal-400');
+            });
+        });
+    </script>
+</body>
+</html>
